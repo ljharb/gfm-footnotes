@@ -1,0 +1,29 @@
+{
+	"name": "gfm-footnotes",
+	"version": "0.0.0",
+	"description": "Prune unused footnote references in GitHub-flavored Markdown",
+	"main": false,
+	"exports": {
+		"./package.json": "./package.json"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ljharb/gfm-footnotes.git"
+	},
+	"keywords": [
+		"gfm",
+		"markdown",
+		"footnote",
+		"references",
+		"unused"
+	],
+	"author": "Jordan Harband <ljharb@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ljharb/gfm-footnotes/issues"
+	},
+	"homepage": "https://github.com/ljharb/gfm-footnotes#readme"
+}
