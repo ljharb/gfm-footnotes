@@ -1,0 +1,8 @@
+Usage: gfm-footnotes [options]
+
+Options:
+  --input <path>        File path containing GFM markdown content. If omitted, input must be piped in.
+    [string]
+
+  --output-file <path>  File path to write output to. If omitted, output will be printed to stdout.
+    [string]

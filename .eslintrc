@@ -1,0 +1,18 @@
+{
+	"root": true,
+
+	"extends": "@ljharb/eslint-config/node/20",
+
+	"parserOptions": {
+		"ecmaVersion": 2024,
+	},
+
+	"overrides": [
+		{
+			"files": "./pargs.mjs",
+			"rules": {
+				"max-lines-per-function": "off",
+			},
+		},
+	],
+}
