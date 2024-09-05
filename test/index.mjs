@@ -78,8 +78,9 @@ test('pruneFootnotes', async (t) => {
 				st.equal(outRelativeFile.status, 0, 'exits with a zero status code when an output file is provided');
 				st.equal(`${outRelativeFile.stdout}`, '', 'stdout is empty');
 				st.equal(`${outRelativeFile.stderr}`, `Wrote GFM markdown output to ${relativeTmpPath}\n`, 'stderr is not empty');
+				const actual = `${await readFile(tmpFile.name, 'utf-8')}`.trim();
 				st.equal(
-					`${await readFile(tmpFile.name, 'utf-8')}`.trim(),
+					actual,
 					expected,
 					'output file has expected contents',
 				);

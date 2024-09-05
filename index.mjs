@@ -44,5 +44,5 @@ export default function pruneFootnotes(input) {
 
 	const footer = usedFootnotes.map(([k, { href }]) => `[${k}]: ${href}`).join('\n');
 
-	return replaceAll(`${body}\n${footer}`, '\n\n', '\n');
+	return replaceAll(`${body}\n${footer}`, /\n\n/g, '\n');
 }

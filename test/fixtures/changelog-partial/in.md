@@ -16,10 +16,6 @@
 ### Refactors
 * `variableUtil`: Avoid creating a single flat variable scope for each lookup ([#3782][] @DanielRosenwasser)
 
-[#3759]: https://github.com/jsx-eslint/eslint-plugin-react/pull/3759
-[#3694]: https://github.com/jsx-eslint/eslint-plugin-react/pull/3694
-[#3771]: https://github.com/jsx-eslint/eslint-plugin-react/pull/3771
-
 [#1000]: https://github.com/jsx-eslint/eslint-plugin-react/pull/1000
 [#1002]: https://github.com/jsx-eslint/eslint-plugin-react/issues/1002
 [#1005]: https://github.com/jsx-eslint/eslint-plugin-react/pull/1005
