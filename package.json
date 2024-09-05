@@ -1,6 +1,6 @@
 {
 	"name": "gfm-footnotes",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Prune unused footnote references in GitHub-flavored Markdown",
 	"bin": "./bin.mjs",
 	"main": false,
