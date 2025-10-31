@@ -23,13 +23,10 @@ const { values: { input: rawInput, 'output-file': o } } = pargs(help, import.met
 	},
 });
 
-const input = typeof rawInput === 'string'
-	? rawInput.length > 0 ? await readFile(
-		rawInput.startsWith('/') ? rawInput : join(process.cwd(), rawInput),
-		'utf-8',
-	) : null
-	: await new Promise((resolve, reject) => {
-		const { stdin } = process;
+const { stdin } = process;
+
+const input = !stdin.isTTY && (typeof rawInput !== 'string' || rawInput.length === 0)
+	? await new Promise((resolve, reject) => {
 		let data = '';
 
 		stdin.setEncoding('utf8');
@@ -40,7 +37,11 @@ const input = typeof rawInput === 'string'
 			resolve(data);
 		});
 		stdin.on('error', reject);
-	});
+	})
+	: typeof rawInput === 'string' && rawInput.length > 0 ? await readFile(
+		rawInput.startsWith('/') ? rawInput : join(process.cwd(), rawInput),
+		'utf-8',
+	) : null;
 
 if (typeof input !== 'string' || input.length === 0) {
 	console.error('no input provided');

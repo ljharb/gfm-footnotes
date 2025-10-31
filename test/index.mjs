@@ -4,7 +4,7 @@ import inspect from 'object-inspect';
 // @ts-expect-error tmp's types are broken
 import tmp from 'tmp';
 
-import { exec, execSync, spawnSync } from 'child_process';
+import { exec, execSync, spawn, spawnSync } from 'child_process';
 import { readFile, readdir, truncate } from 'fs/promises';
 import { join, relative, resolve } from 'path';
 import { promisify } from 'util';
@@ -108,5 +108,81 @@ test('pruneFootnotes', async (t) => {
 			});
 		}));
 
+	t.test('no input provided', async (st) => {
+		st.test('stdin is a TTY (interactive)', async (s1) => {
+			/*
+			 * Inherit stdin to make it a TTY. With the bug, the process will hang.
+			 * After the fix, it should exit with code 1 and print error/help.
+			 */
+			/** @type {import('child_process').ChildProcess | null} */
+			let child = null;
+			/** @type {Promise<{ code: number | null, stdout: string, stderr: string }>} */
+			const p = new Promise((resolveP, rejectP) => {
+				child = spawn(bin, [], { stdio: ['inherit', 'pipe', 'pipe'] });
+				let stdout = '';
+				let stderr = '';
+
+				child.stdout?.on('data', /** @param {Buffer} chunk */ (chunk) => { stdout += chunk; });
+				child.stderr?.on('data', /** @param {Buffer} chunk */ (chunk) => { stderr += chunk; });
+
+				child.on('exit', /** @param {number | null} code */ (code) => {
+					resolveP({ code, stdout, stderr });
+				});
+				child.on('error', rejectP);
+			});
+
+			let timer;
+			const raced = await Promise.race([
+				new Promise((r) => {
+					timer = setTimeout(() => {
+						s1.fail('timed out - CLI hung waiting for input instead of exiting with error');
+						if (child) { child.kill(); }
+						r(null);
+					}, 1e3);
+				}),
+				p,
+			]);
+
+			if (timer) { clearTimeout(timer); }
+			if (raced) {
+				s1.equal(raced.code, 1, 'exit code is 1');
+				s1.ok(raced.stderr.includes('no input provided'), 'stderr contains error message');
+				s1.ok(raced.stdout.includes('Usage: gfm-footnotes'), 'stdout contains help text');
+			}
+			s1.end();
+		});
+
+		st.test('stdin is piped EOF (non-tty)', async (s2) => {
+			/*
+			 * Use a pipe for stdin, immediately close it to simulate an empty input stream.
+			 * The CLI should treat this as no input provided and exit with code 1.
+			 */
+			/** @type {Promise<{ code: number | null, stdout: string, stderr: string }>} */
+			const p = new Promise((resolveP, rejectP) => {
+				const child = spawn(bin, [], { stdio: ['pipe', 'pipe', 'pipe'] });
+				let stdout = '';
+				let stderr = '';
+
+				child.stdout?.on('data', /** @param {Buffer} chunk */ (chunk) => { stdout += chunk; });
+				child.stderr?.on('data', /** @param {Buffer} chunk */ (chunk) => { stderr += chunk; });
+
+				/* close stdin immediately -> EOF */
+				child.stdin?.end();
+
+				child.on('exit', /** @param {number | null} code */ (code) => {
+					resolveP({ code, stdout, stderr });
+				});
+				child.on('error', rejectP);
+			});
+
+			const out = await p;
+			s2.equal(out.code, 1, 'exit code is 1 for empty piped input');
+			s2.ok(out.stderr.includes('no input provided'), 'stderr contains error message');
+			s2.ok(out.stdout.includes('Usage: gfm-footnotes'), 'stdout contains help text');
+			s2.end();
+		});
+
+		st.end();
+	});
 	t.end();
 });
