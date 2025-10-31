@@ -4,9 +4,12 @@ import inspect from 'object-inspect';
 // @ts-expect-error tmp's types are broken
 import tmp from 'tmp';
 
-import { execSync, spawnSync } from 'child_process';
+import { exec, execSync, spawnSync } from 'child_process';
 import { readFile, readdir, truncate } from 'fs/promises';
 import { join, relative, resolve } from 'path';
+import { promisify } from 'util';
+
+const execP = promisify(exec);
 
 import pruneFootnotes from '../index.mjs';
 
@@ -84,6 +87,22 @@ test('pruneFootnotes', async (t) => {
 					expected,
 					'output file has expected contents',
 				);
+
+				st.test('piped input', async (s2t) => {
+					const promise = execP(`cat ${inPath} | ${bin}`);
+
+					let timer;
+					await Promise.race([
+						new Promise((r) => { timer = setTimeout(r, 1e3); })
+							.then(() => s2t.fail('timed out')),
+						promise,
+					]);
+					clearTimeout(timer);
+
+					const pipeResult = await promise;
+					s2t.equal(pipeResult.stdout.trim(), expected, 'stdout is as expected');
+					s2t.equal(pipeResult.stderr, '', 'stderr is empty');
+				});
 
 				st.end();
 			});
