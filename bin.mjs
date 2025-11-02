@@ -3,13 +3,19 @@
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 
-import pargs from './pargs.mjs';
+import pargs from 'pargs';
 
 import pruneFootnotes from './index.mjs';
 
-const help = await readFile(join(import.meta.dirname, './help.txt'), 'utf8');
-
-const { values: { input: rawInput, 'output-file': o } } = pargs(help, import.meta.filename, {
+const {
+	help,
+	errors,
+	values: {
+		help: helpV,
+		input: rawInput,
+		'output-file': o,
+	},
+} = await pargs(import.meta.filename, {
 	options: {
 		input: {
 			short: 'i',
@@ -25,7 +31,7 @@ const { values: { input: rawInput, 'output-file': o } } = pargs(help, import.met
 
 const { stdin } = process;
 
-const input = !stdin.isTTY && (typeof rawInput !== 'string' || rawInput.length === 0)
+const input = !helpV && !stdin.isTTY && (typeof rawInput !== 'string' || rawInput.length === 0)
 	? await new Promise((resolve, reject) => {
 		let data = '';
 
@@ -43,11 +49,11 @@ const input = !stdin.isTTY && (typeof rawInput !== 'string' || rawInput.length =
 		'utf-8',
 	) : null;
 
-if (typeof input !== 'string' || input.length === 0) {
-	console.error('no input provided');
-	console.log(help);
-	process.exit(1);
+if (!helpV && (typeof input !== 'string' || input.length === 0)) {
+	errors.push('no input provided');
 }
+
+await help();
 
 const result = pruneFootnotes(input);
 
