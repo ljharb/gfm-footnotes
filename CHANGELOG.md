@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.0.0](https://github.com/ljharb/gfm-footnotes/compare/v1.0.2...v2.0.0) - 2025-11-01
+
+### Commits
+
+- [Breaking] use `pargs` package [`325b394`](https://github.com/ljharb/gfm-footnotes/commit/325b39478bb2f8fd5835068b786d2ed02e3faefe)
+- [meta] exclude more files [`7937e3c`](https://github.com/ljharb/gfm-footnotes/commit/7937e3c42c1aa0b91e337333ac6b62034970892b)
+
 ## [v1.0.2](https://github.com/ljharb/gfm-footnotes/compare/v1.0.1...v1.0.2) - 2025-10-31
 
 ### Commits
