@@ -73,6 +73,9 @@
 	},
 	"publishConfig": {
 		"ignore": [
+			".attw.json",
+			".eslintrc",
+			".nycrc",
 			".github/workflows",
 			"test"
 		]
