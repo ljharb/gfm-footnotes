@@ -52,5 +52,5 @@ MIT
 [downloads-url]: https://npm-stat.com/charts.html?package=gfm-footnotes
 [codecov-image]: https://codecov.io/gh/ljharb/gfm-footnotes/branch/main/graphs/badge.svg
 [codecov-url]: https://app.codecov.io/gh/ljharb/gfm-footnotes/
-[actions-image]: https://img.shields.io/endpoint?url=https://github-actions-badge-u3jn4tfpocch.runkit.sh/ljharb/gfm-footnotes
+[actions-image]: https://img.shields.io/github/check-runs/ljharb/gfm-footnotes/main
 [actions-url]: https://github.com/ljharb/gfm-footnotes/actions
