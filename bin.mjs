@@ -18,11 +18,14 @@ const {
 } = await pargs(import.meta.filename, {
 	options: {
 		input: {
+			description: 'File path containing GFM markdown content. If omitted, input must be piped in.',
+			placeholder: 'path',
 			short: 'i',
 			type: 'string',
 		},
 		'output-file': {
-			default: undefined,
+			description: 'File path to write output to. If omitted, output will be printed to stdout.',
+			placeholder: 'path',
 			short: 'o',
 			type: 'string',
 		},
