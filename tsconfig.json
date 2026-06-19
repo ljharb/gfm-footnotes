@@ -4,8 +4,7 @@
 		"target": "ESNext",
 		"module": "NodeNext",
 		"moduleResolution": "nodenext",
-		"resolveJsonModule": false,
-		"maxNodeModuleJsDepth": 0,
+		"types": ["node"],
 	},
 	"exclude": [
 		"coverage",

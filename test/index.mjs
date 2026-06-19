@@ -1,7 +1,6 @@
 import test from 'tape';
 import v from 'es-value-fixtures';
 import inspect from 'object-inspect';
-// @ts-expect-error tmp's types are broken
 import tmp from 'tmp';
 
 import { exec, execSync, spawn, spawnSync } from 'child_process';
